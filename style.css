@@ -468,7 +468,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
     width: 100%;
     padding: 0.9rem 1rem;
     font: inherit;
@@ -482,7 +483,8 @@ textarea {
    its color so it matches the website.
 */
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     outline-color: var(--dark-blue);
 }
 
@@ -496,6 +498,80 @@ textarea::placeholder {
     color: var(--placeholder-color);
 }
 
+
+/* ==================================================
+   LAB 2 - FEEDBACK FORM
+================================================== */
+
+/*
+   Styles for the new feedback form elements.
+   JavaScript will later handle validation and feedback.
+*/
+
+/* Makes the dropdown match the other form fields */
+select {
+    cursor: pointer;
+}
+
+/* Error messages appear below invalid fields */
+.field-error {
+    margin: 0.4rem 0 0;
+    color: #b42318;
+    font-size: 0.85rem;
+}
+
+/* JavaScript adds this class when a field is invalid */
+.input-error {
+    border-color: #b42318;
+}
+
+/* JavaScript adds this class when a field is valid */
+.input-success {
+    border-color: #287d57;
+}
+
+/* Shows the number of characters entered in Comments */
+.character-counter {
+    margin: 0.4rem 0 0;
+    color: var(--secondary-text);
+    font-size: 0.85rem;
+}
+
+/* Places the Submit and Clear buttons next to each other */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Secondary button for clearing the form */
+.clear-button {
+    background: var(--light-gray);
+    color: var(--dark-blue);
+    border: 0.0625rem solid var(--form-border);
+}
+
+/* Uses the maple accent on hover and keyboard focus */
+.clear-button:hover,
+.clear-button:focus-visible {
+    background: var(--maple);
+    color: var(--white);
+    border-color: var(--maple);
+}
+
+/* Displays the confirmation message after submission */
+.form-status {
+    margin-top: 1.5rem;
+    font-weight: bold;
+}
+
+/* Smooth transition when validation changes the border color */
+input,
+textarea,
+select {
+    transition: border-color 0.2s ease;
+}
 
 /* ==================================================
    HOVER AND KEYBOARD FOCUS
