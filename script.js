@@ -17,6 +17,8 @@ const topicError = document.querySelector("#topic-error");
 const commentsInput = document.querySelector("#comments");
 const commentsError = document.querySelector("#comments-error");
 const commentsCounter = document.querySelector("#comments-counter");
+const websiteInput = document.querySelector("#website");
+const websiteError = document.querySelector("#website-error");
 
 // Function to check if the full name is valid:
 function validateFullName(name) {
@@ -45,6 +47,11 @@ function validateTopic(topic) {
 // Check if the comment contains at least 15 characters
 function validateComments(comments) {
     return comments.trim().length >= 15;
+}
+
+// Check the website using the browser's built-in URL validation
+function validateWebsite() {
+    return websiteInput.value.trim() === "" || websiteInput.validity.valid;
 }
 
 // Update the character counter while typing
@@ -181,6 +188,32 @@ commentsInput.addEventListener("blur", function () {
             commentsInput,
             commentsError,
             "Please enter at least 15 characters."
+        );
+    }
+});
+
+// Validate the website when the user leaves the field
+websiteInput.addEventListener("blur", function () {
+    if (validateWebsite()) {
+        clearFieldError(websiteInput, websiteError);
+    } else {
+        showFieldError(
+            websiteInput,
+            websiteError,
+            "Please enter a valid URL, including https://."
+        );
+    }
+});
+
+// Update the validation when the website is edited
+websiteInput.addEventListener("input", function () {
+    if (validateWebsite()) {
+        clearFieldError(websiteInput, websiteError);
+    } else if (websiteInput.classList.contains("input-error")) {
+        showFieldError(
+            websiteInput,
+            websiteError,
+            "Please enter a valid URL, including https://."
         );
     }
 });
