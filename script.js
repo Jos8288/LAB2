@@ -14,6 +14,9 @@ const emailInput = document.querySelector("#email");
 const emailError = document.querySelector("#email-error");
 const topicInput = document.querySelector("#topic");
 const topicError = document.querySelector("#topic-error");
+const commentsInput = document.querySelector("#comments");
+const commentsError = document.querySelector("#comments-error");
+const commentsCounter = document.querySelector("#comments-counter");
 
 // Function to check if the full name is valid:
 function validateFullName(name) {
@@ -37,6 +40,27 @@ function validateEmail(email) {
 // Check if a topic has been selected
 function validateTopic(topic) {
     return topic !== "";
+}
+
+// Check if the comment contains at least 15 characters
+function validateComments(comments) {
+    return comments.trim().length >= 15;
+}
+
+// Update the character counter while typing
+function updateCommentsCounter() {
+    const characterCount = commentsInput.value.length;
+
+    commentsCounter.textContent =
+        `${characterCount} characters (minimum 15)`;
+
+    if (validateComments(commentsInput.value)) {
+        commentsCounter.style.color = "#287d57";
+        commentsCounter.textContent += " - Minimum text reached";
+    } else {
+        commentsCounter.style.color = "#b42318";
+        commentsCounter.textContent += " - Text is too short";
+    }
 }
 
 // Show an error message when a field is invalid
@@ -129,6 +153,34 @@ topicInput.addEventListener("blur", function () {
             topicInput,
             topicError,
             "Please choose a topic."
+        );
+    }
+});
+
+// Update the counter whenever the comment changes
+commentsInput.addEventListener("input", function () {
+    updateCommentsCounter();
+
+    if (validateComments(commentsInput.value)) {
+        clearFieldError(commentsInput, commentsError);
+    } else if (commentsInput.classList.contains("input-error")) {
+        showFieldError(
+            commentsInput,
+            commentsError,
+            "Please enter at least 15 characters."
+        );
+    }
+});
+
+// Validate the comment when the user leaves the field
+commentsInput.addEventListener("blur", function () {
+    if (validateComments(commentsInput.value)) {
+        clearFieldError(commentsInput, commentsError);
+    } else {
+        showFieldError(
+            commentsInput,
+            commentsError,
+            "Please enter at least 15 characters."
         );
     }
 });
