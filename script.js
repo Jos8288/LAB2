@@ -2,10 +2,6 @@
    LAB 2 - FEEDBACK FORM
 ================================================== */
 
-/*
-   JavaScript for the feedback form:
-*/
-
 // Select the form elements:
 const feedbackForm = document.querySelector("#feedback-form");
 const fullNameInput = document.querySelector("#full-name");
@@ -97,7 +93,7 @@ fullNameInput.addEventListener("blur", function () {
         showFieldError(
             fullNameInput,
             nameError,
-            "Please enter a valid name with at least 2 characters."
+            "Please enter a valid name using at least 2 letters."
         );
     }
 });
@@ -110,7 +106,7 @@ fullNameInput.addEventListener("input", function () {
         showFieldError(
             fullNameInput,
             nameError,
-            "Please enter a valid name with at least 2 characters."
+            "Please enter a valid name using at least 2 letters."
         );
     }
 });
@@ -281,6 +277,37 @@ function validateForm() {
     return isValid;
 }
 
+// Clear validation messages and visual feedback
+function clearFormState() {
+    const fields = [
+        [fullNameInput, nameError],
+        [emailInput, emailError],
+        [topicInput, topicError],
+        [commentsInput, commentsError],
+        [websiteInput, websiteError]
+    ];
+
+    fields.forEach(function (field) {
+        const input = field[0];
+        const errorElement = field[1];
+
+        input.classList.remove("input-error", "input-success");
+        input.removeAttribute("aria-invalid");
+        errorElement.textContent = "";
+    });
+
+    commentsCounter.textContent = "0 characters (minimum 15)";
+    commentsCounter.style.color = "";
+
+    formStatus.textContent = "";
+}
+
+// Reset the form and all validation feedback
+function resetForm() {
+    feedbackForm.reset();
+    clearFormState();
+}
+
 // Check the form when the Submit button is clicked
 feedbackForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -290,7 +317,18 @@ feedbackForm.addEventListener("submit", function (event) {
     if (validateForm()) {
         const fullName = fullNameInput.value.trim();
 
+        resetForm();
+
         formStatus.textContent =
             `Thanks for your feedback, ${fullName}!`;
+
+        setTimeout(function () {
+            formStatus.textContent = "";
+        }, 4000);
     }
+});
+
+// Restore the initial form state when Clear is clicked
+feedbackForm.addEventListener("reset", function () {
+    clearFormState();
 });
