@@ -19,6 +19,7 @@ const commentsError = document.querySelector("#comments-error");
 const commentsCounter = document.querySelector("#comments-counter");
 const websiteInput = document.querySelector("#website");
 const websiteError = document.querySelector("#website-error");
+const formStatus = document.querySelector("#form-status");
 
 // Function to check if the full name is valid:
 function validateFullName(name) {
@@ -215,5 +216,81 @@ websiteInput.addEventListener("input", function () {
             websiteError,
             "Please enter a valid URL, including https://."
         );
+    }
+});
+
+// Validate all fields before submitting the form
+function validateForm() {
+    let isValid = true;
+
+    if (!validateFullName(fullNameInput.value)) {
+        showFieldError(
+            fullNameInput,
+            nameError,
+            "Please enter a valid name with at least 2 characters."
+        );
+        isValid = false;
+    } else {
+        clearFieldError(fullNameInput, nameError);
+    }
+
+    if (!validateEmail(emailInput.value)) {
+        showFieldError(
+            emailInput,
+            emailError,
+            "Please enter a valid email address."
+        );
+        isValid = false;
+    } else {
+        clearFieldError(emailInput, emailError);
+    }
+
+    if (!validateTopic(topicInput.value)) {
+        showFieldError(
+            topicInput,
+            topicError,
+            "Please choose a topic."
+        );
+        isValid = false;
+    } else {
+        clearFieldError(topicInput, topicError);
+    }
+
+    if (!validateComments(commentsInput.value)) {
+        showFieldError(
+            commentsInput,
+            commentsError,
+            "Please enter at least 15 characters."
+        );
+        isValid = false;
+    } else {
+        clearFieldError(commentsInput, commentsError);
+    }
+
+    if (!validateWebsite()) {
+        showFieldError(
+            websiteInput,
+            websiteError,
+            "Please enter a valid URL, including https://."
+        );
+        isValid = false;
+    } else if (websiteInput.value.trim() !== "") {
+        clearFieldError(websiteInput, websiteError);
+    }
+
+    return isValid;
+}
+
+// Check the form when the Submit button is clicked
+feedbackForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    formStatus.textContent = "";
+
+    if (validateForm()) {
+        const fullName = fullNameInput.value.trim();
+
+        formStatus.textContent =
+            `Thanks for your feedback, ${fullName}!`;
     }
 });
