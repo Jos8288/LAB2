@@ -296,7 +296,9 @@
                         <p class="field-error" id="topic-error" aria-live="polite"></p>
                     </div>
 
-                    <!-- Comments must contain at least 15 characters -->
+                    <!-- Comments must contain between 15 and 40 characters -->
+                    <!--I removed minlength="15" since I now use JS with if, else if and else statements to check both character limits.
+                        I did not add maxlength="40" since I need JS to detect comments that are too long and display my custom error message. -->
                     <div class="form-group">
                         <label for="comments">Comments</label>
                         <textarea
@@ -305,12 +307,11 @@
                             rows="6"
                             placeholder="Write your feedback here..."
                             aria-describedby="comments-counter comments-error"
-                            required
-                            minlength="15"></textarea>
+                            required></textarea>
 
                         <!-- JavaScript will update this counter -->
                         <p class="character-counter" id="comments-counter">
-                            0 characters (minimum 15)
+                            0 characters (15–40 allowed)
                         </p>
                         <p class="field-error" id="comments-error" aria-live="polite"></p>
                     </div>

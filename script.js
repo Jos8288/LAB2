@@ -41,9 +41,21 @@ function validateTopic(topic) {
     return topic !== "";
 }
 
-// Check if the comment contains at least 15 characters
+// Check if the comment contains at least 15 characters and max 40 characters:
+// I updated this function to check both the minimum and maximum length using if, else if and else statements.
+// The function returns true for a valid length and false otherwise.
+// I use trim() to remove spaces at the beginning and end and .length to count the remaining characters.
+
 function validateComments(comments) {
-    return comments.trim().length >= 15;
+    const characterCount = comments.trim().length;
+
+    if (characterCount < 15) {
+        return false;
+    } else if (characterCount <= 40) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // Check the website using the browser's built-in URL validation
@@ -51,19 +63,25 @@ function validateWebsite() {
     return websiteInput.value.trim() === "" || websiteInput.validity.valid;
 }
 
-// Update the character counter while typing
+// Update the character counter while typing:
+// I updated the character counter to show the new 15-40 character limit.
+// I added if, else if and else statements to check the length and change the counter color and message.
+// Text turns red if it is too short or too long and green when the comment has a valid length.
 function updateCommentsCounter() {
-    const characterCount = commentsInput.value.length;
+    const characterCount = commentsInput.value.trim().length;
 
     commentsCounter.textContent =
-        `${characterCount} characters (minimum 15)`;
+        `${characterCount} characters (15-40 allowed)`;
 
-    if (validateComments(commentsInput.value)) {
-        commentsCounter.style.color = "#287d57";
-        commentsCounter.textContent += " - Minimum text reached";
-    } else {
+    if (characterCount <15) {
         commentsCounter.style.color = "#b42318";
         commentsCounter.textContent += " - Text is too short";
+     } else if (characterCount <= 40) {
+        commentsCounter.style.color = "#287d57";
+        commentsCounter.textContent += " - Valid length";
+    } else {
+        commentsCounter.style.color = "#b42318";
+        commentsCounter.textContent += " - Maximum 40 characters allowed";
     }
 }
 
@@ -161,30 +179,60 @@ topicInput.addEventListener("blur", function () {
     }
 });
 
-// Update the counter whenever the comment changes
+// Update the counter whenever the comment changes:
+// I updated this eventlistener to check the new character limits while the user types.
+// I use if and else if statements to check whether the comment is valid, already has an error or exceeds 40 characters.
+// I also use a separate if/else statement to choose the correct error message when the comment is too short or too long.
+// The error disappears when the comment has a valid length.
 commentsInput.addEventListener("input", function () {
     updateCommentsCounter();
+
+    const characterCount = commentsInput.value.trim().length;
 
     if (validateComments(commentsInput.value)) {
         clearFieldError(commentsInput, commentsError);
     } else if (commentsInput.classList.contains("input-error")) {
+        if (characterCount < 15) {
+            showFieldError(
+                commentsInput,
+                commentsError,
+                "Please enter at least 15 characters."
+        );
+    } else {
+            showFieldError(
+                commentsInput,
+                commentsError,
+                "Please enter a maximum of 40 characters."
+            );
+        }
+    } else if (characterCount > 40) {
+        showFieldError(
+            commentsInput,
+            commentsError,
+            "Please enter a maximum of 40 characters."
+        );
+    }
+});
+
+// Validate the comment when the user leaves the field:
+// I updated this eventlistener to check both the minimum and maximum limits using if, else if and else statements.
+// When the user leaves the field, it checks if the comment is too short, valid or too long and shows the correct feedback.
+commentsInput.addEventListener("blur", function () {
+    const characterCount = commentsInput.value.trim().length;
+
+    if (characterCount < 15) {
         showFieldError(
             commentsInput,
             commentsError,
             "Please enter at least 15 characters."
         );
-    }
-});
-
-// Validate the comment when the user leaves the field
-commentsInput.addEventListener("blur", function () {
-    if (validateComments(commentsInput.value)) {
+    } else if (characterCount <= 40) {
         clearFieldError(commentsInput, commentsError);
     } else {
         showFieldError(
             commentsInput,
             commentsError,
-            "Please enter at least 15 characters."
+            "Please enter a maximum of 40 characters."
         );
     }
 });
@@ -229,7 +277,7 @@ function validateForm() {
     } else {
         clearFieldError(fullNameInput, nameError);
     }
-
+    
     if (!validateEmail(emailInput.value)) {
         showFieldError(
             emailInput,
@@ -252,15 +300,27 @@ function validateForm() {
         clearFieldError(topicInput, topicError);
     }
 
-    if (!validateComments(commentsInput.value)) {
-        showFieldError(
-            commentsInput,
-            commentsError,
-            "Please enter at least 15 characters."
+    // I updated the Comments validation before submitting the form.
+    // I use if, else if and else to check the character count.
+    // The form is only valid if the comment contains 15-40 characters.
+    const characterCount = commentsInput.value.trim().length;
+
+        if (characterCount < 15) {
+            showFieldError(
+                commentsInput,
+                commentsError,
+                "Please enter at least 15 characters."
         );
         isValid = false;
-    } else {
-        clearFieldError(commentsInput, commentsError);
+        } else if (characterCount <= 40) {
+            clearFieldError(commentsInput, commentsError);
+        } else {
+            showFieldError(
+                commentsInput,
+                commentsError,
+                "Please enter a maximum of 40 characters."
+            );
+        isValid = false;
     }
 
     if (!validateWebsite()) {
@@ -296,7 +356,8 @@ function clearFormState() {
         errorElement.textContent = "";
     });
 
-    commentsCounter.textContent = "0 characters (minimum 15)";
+    // I updated the counter text to show the new 15-40 character limit.
+    commentsCounter.textContent = "0 characters (15–40 allowed)";
     commentsCounter.style.color = "";
 
     formStatus.textContent = "";
